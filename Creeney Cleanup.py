@@ -1,15 +1,11 @@
-import shutil
+import shutil, os
 
 #deletes tempory file
 def delete_temp_files():
-    file = "C:\\WINDOWS\\Temp\\"
+    folder = "C:\\WINDOWS\\Temp"
 
-    #trys to remove the error, if it fails, it displays the error for you to read
-    try:    
-        shutil.rmtree(file)
-        print(f"Contents of {file} has been deleted SUCCESSFULLY!")
-    except OSError as e:
-        print(f"Error! Directory: {file} : {e.strerror}")
+    shutil.rmtree(folder, ignore_errors=True)
+    print(f"Contents of {folder} has been deleted SUCCESSFULLY!")
 
 #def delete_cache_file():
     
