@@ -1,6 +1,5 @@
-import shutil, os
+import shutil, os, winshell, win32con, time
 
-#deletes tempory file
 def delete_temp_files():
     folder = "C:\\WINDOWS\\Temp"
 
@@ -24,21 +23,34 @@ def delete_cache_file():
     shutil.rmtree(folder_user, ignore_errors=True)
     print(f"Contents of {folder_user} has been deleted SUCCESSFULLY!")
     
-#def delete_old_restore_points():
 
-#def delete_windows_update():
+def empty_recycle_bin():
+    try:
+        winshell.recycle_bin().empty(confirm=False, show_progress=False, sound=False)
+        print(f"Recycle Bin has been emptied SUCCESSFULL!")
+    except Exception as e:
+        print(f"Error! Recycle Bin Not Emptied : Error: {e}")
 
-#def delete_log_reports():
+def delete_old_downloads():
+    folder = "C:\\Users\\user\\Downloads"
+    current_time = time.time()
+    day_limit = 30
 
-#def delete_unused_apps():
+    for (filename) in os.listdir(folder): 
+        file_path = os.path.join(folder, filename)
+        if os.path.isfile(file_path):
+            file_age = (current_time - os.path.getctime(file_path) / (24*3600))
+            if file_age > day_limit:
+                os.remove(file_path)
+                print(f"Deleted: {filename} from {folder}")
+    print(f"Deleted All Files older than 30 Days from {folder}")
+            
+def delete_browser_cookies():
+    shutil.rmtree(os.path.join(os.getenv("LOCALAPPDATA"), 'Google', 'Chrome', 'User Data', 'Default', 'Cache'))
+    print(f"Browser Cookies and Cache Deleted SUCCESSFULLY!")
 
-#def delete_large_files():
-
-#def empty_recycle_bin():
-
-#def delete_old_downloads():
-
-#def delete_browser_cookies():
-
-#delete_temp_files()
+delete_temp_files()
 delete_cache_file()
+delete_browser_cookies()
+empty_recycle_bin()
+delete_old_downloads()
